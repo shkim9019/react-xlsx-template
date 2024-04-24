@@ -1,4 +1,5 @@
-import {read, utils, WorkBook, WorkSheet} from "xlsx";
+import {read, utils, WorkBook, WorkSheet, writeFile} from "xlsx";
+import XLSX from 'xlsx-js-style';
 
 export const trimData = (data:string|number) => {
     return data.toString().trimStart().trimEnd();
@@ -100,4 +101,58 @@ export const getColumnWidthListJson = (originRows:any[][]) => {
     })
 
     return resultList
+}
+
+const allBorder = {
+    right: {
+        style: "thin",
+        color: "000000"
+    },
+    left: {
+        style: "thin",
+        color: "000000"
+    },
+    top: {
+        style: "thin",
+        color: "000000"
+    },
+    bottom: {
+        style: "thin",
+        color: "000000"
+    },
+}
+
+export const exportExcelFile = (header:string[],data:any[], sheetName:string, fileName:string, columWidthList?:any[]  ) => {
+    const workbook:XLSX.WorkBook   = XLSX.utils.book_new();
+    const worksheet:XLSX.WorkSheet = XLSX.utils.json_to_sheet([]);
+
+    // A1에 custom 헤더 생성
+    XLSX.utils.sheet_add_aoa(worksheet, [header], {origin:"A1"});
+
+    // 데이터 세팅
+    XLSX.utils.sheet_add_json(worksheet, data, {origin:"A2", skipHeader:true})
+
+    // 워크시트 추가
+    XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
+
+    if(columWidthList){
+        worksheet["!cols"] = columWidthList;
+    }
+
+    // 스타일 추가
+    //https://stackoverflow.com/questions/50147526/sheetjs-xlsx-cell-styling
+    //https://www.npmjs.com/package/xlsx-js-style
+    worksheet["A1"].s = {
+        font: {
+            name: "arial"
+        },
+        alignment: {
+            vertical: "center",
+            horizontal: "center",
+        },
+        border: allBorder,
+        // fill: { bgColor: { rgb: 'E4F7BA' } }
+    };
+
+    XLSX.writeFile(workbook, fileName)
 }
