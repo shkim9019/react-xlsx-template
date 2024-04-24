@@ -13,6 +13,8 @@ export const isValidFileContent = (originalData:any[][]):boolean => {
     data.reduce((_:any[], cur:any[]) => {
         const errorList:string[] = [];
 
+        console.log(cur)
+
         if(typeof cur[1] !== "number"){
             errorList.push("회사코드")
         }
@@ -26,7 +28,7 @@ export const isValidFileContent = (originalData:any[][]):boolean => {
         }
 
         if(!isValidString(cur[4])){
-            errorList.push("국가코드")
+            errorList.push("국적")
         }
 
         if(!isValidString(cur[5])){
@@ -40,6 +42,51 @@ export const isValidFileContent = (originalData:any[][]):boolean => {
         if(errorList.length > 0 ){
             const errorContent = errorList.join(", ");
             alert(`${cur[0]}행의 ${errorContent} 형식을 확인해 주세요.`)
+            result = false
+            data.splice(1)
+        }
+
+        return cur;
+    },[])
+
+
+    return result;
+}
+
+export const isValidFileContentJson = (originalData:any[]):boolean => {
+    let result = true;
+    const data:any[][] = originalData.slice(0);
+
+    data.reduce((_:any, cur:any) => {
+        const errorList:string[] = [];
+
+        if(typeof cur["회사코드"] !== "number"){
+            errorList.push("회사코드")
+        }
+
+        if(!isValidString(cur["이름"])){
+            errorList.push("이름")
+        }
+
+        if(!isValidString(cur["이메일"])){
+            errorList.push("이메일")
+        }
+
+        if(!isValidString(cur["국적"])){
+            errorList.push("국적")
+        }
+
+        if(!isValidString(cur["연락처"])){
+            errorList.push("연락처")
+        }
+
+        if(!isValidDate(cur["생년월일"])){
+            errorList.push("생년월일")
+        }
+
+        if(errorList.length > 0 ){
+            const errorContent = errorList.join(", ");
+            alert(`${cur["NO"]}행의 ${errorContent} 형식을 확인해 주세요.`)
             result = false
             data.splice(1)
         }
