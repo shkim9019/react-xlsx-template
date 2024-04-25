@@ -1,5 +1,12 @@
 import FileImport from "./fileImport";
-import {exportExcelFile, getColumnWidthListJson, isValidFileContentJson, onChangeFileByJSON} from "../utils";
+import {
+    exportExcelFile,
+    getColumnWidthListJson,
+    getCustomCellStyleJson,
+    getHeaderStyle,
+    isValidFileContentJson,
+    onChangeFileByJSON
+} from "../utils";
 import FleExport from "./fileExport";
 import React, {useState} from "react";
 import FileContentTableJson from "./fileContentTableJson";
@@ -11,8 +18,7 @@ export default function JsonExample(){
 
         const newHeaders:string[] = ["NO","회사코드","이름","이메일","국적","전화번호","생년월일"];
         const columnWidth = getColumnWidthListJson(rows)
-        exportExcelFile(newHeaders, rows, "TEST", "testFile.xlsx",columnWidth )
-
+        exportExcelFile(getHeaderStyle(newHeaders), getCustomCellStyleJson(rows), "TEST", "testFile.xlsx",columnWidth )
     }
 
     return (

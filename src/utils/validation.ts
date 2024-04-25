@@ -13,8 +13,6 @@ export const isValidFileContent = (originalData:any[][]):boolean => {
     data.reduce((_:any[], cur:any[]) => {
         const errorList:string[] = [];
 
-        console.log(cur)
-
         if(typeof cur[1] !== "number"){
             errorList.push("회사코드")
         }

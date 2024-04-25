@@ -1,4 +1,4 @@
-import {read, utils, WorkBook, WorkSheet, writeFile} from "xlsx";
+import {read, utils, WorkBook, WorkSheet} from "xlsx";
 import XLSX from 'xlsx-js-style';
 
 export const trimData = (data:string|number) => {
@@ -122,7 +122,95 @@ const allBorder = {
     },
 }
 
-export const exportExcelFile = (header:string[],data:any[], sheetName:string, fileName:string, columWidthList?:any[]  ) => {
+export const getHeaderStyle = (header:string[]) => {
+    return header.map((head:string) => {
+        return {
+            v: head,
+            t:"s",
+            s: {
+                alignment: {
+                    vertical: "center",
+                    horizontal: "center",
+                },
+                border: allBorder,
+                fill: { fgColor: { rgb: 'E9E9E9' } }
+            }
+        }
+    })
+}
+
+export const getCustomCellStyleJson = (data:any[]) => {
+    return data.map((row:any) => Object.keys(row).map((key:any) => {
+        const item = row[key];
+        const type = item instanceof Date ? 'date' : typeof item;
+        let cellType = "s";
+        switch (type){
+            case "date":
+                cellType = "d"
+                break;
+            case "boolean":
+                cellType = "b"
+                break;
+            case "number":
+                cellType = "n"
+                break;
+            case "string":
+                cellType = "s"
+                break;
+            default:
+                break;
+        }
+
+        return {
+            v: item,
+            t: cellType,
+            s: {
+                alignment: {
+                    vertical: "center",
+                    horizontal: "center",
+                },
+                border: allBorder
+            },
+        }
+    }))
+}
+
+export const getCustomCellStyleArray = (data:any[]) => {
+    return data.map((row:any) => row.map((item:any) => {
+        const type = item instanceof Date ? 'date' : typeof item;
+        let cellType = "s";
+        switch (type){
+            case "date":
+                cellType = "d"
+                break;
+            case "boolean":
+                cellType = "b"
+                break;
+            case "number":
+                cellType = "n"
+                break;
+            case "string":
+                cellType = "s"
+                break;
+            default:
+                break;
+        }
+
+        return {
+            v: item,
+            t: cellType,
+            s: {
+                alignment: {
+                    vertical: "center",
+                    horizontal: "center",
+                },
+                border: allBorder
+            }
+        }
+    }))
+}
+
+export const exportExcelFile = (header:any,data:any[], sheetName:string, fileName:string, columWidthList?:any[]  ) => {
     const workbook:XLSX.WorkBook   = XLSX.utils.book_new();
     const worksheet:XLSX.WorkSheet = XLSX.utils.json_to_sheet([]);
 
@@ -135,24 +223,10 @@ export const exportExcelFile = (header:string[],data:any[], sheetName:string, fi
     // 워크시트 추가
     XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
 
+    console.log(columWidthList)
     if(columWidthList){
         worksheet["!cols"] = columWidthList;
     }
-
-    // 스타일 추가
-    //https://stackoverflow.com/questions/50147526/sheetjs-xlsx-cell-styling
-    //https://www.npmjs.com/package/xlsx-js-style
-    worksheet["A1"].s = {
-        font: {
-            name: "arial"
-        },
-        alignment: {
-            vertical: "center",
-            horizontal: "center",
-        },
-        border: allBorder,
-        // fill: { bgColor: { rgb: 'E4F7BA' } }
-    };
 
     XLSX.writeFile(workbook, fileName)
 }

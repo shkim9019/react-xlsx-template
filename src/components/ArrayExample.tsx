@@ -1,5 +1,12 @@
 import FileImport from "./fileImport";
-import {exportExcelFile, getColumnWidthList, isValidFileContent, onChangeFileByArray} from "../utils";
+import {
+    exportExcelFile,
+    getColumnWidthList,
+    getCustomCellStyleArray,
+    getHeaderStyle,
+    isValidFileContent,
+    onChangeFileByArray
+} from "../utils";
 import FleExport from "./fileExport";
 import FileContentTable from "./fileContentTable";
 import React, {useState} from "react";
@@ -11,7 +18,7 @@ export default function ArrayExample(){
 
         const newHeaders:string[] = ["NO","회사코드","이름","이메일","국적","전화번호","생년월일"];
         const columnWidthList = getColumnWidthList(rows)
-        exportExcelFile(newHeaders, rows.slice(1), "TEST", "testFile.xlsx",columnWidthList  )
+        exportExcelFile(getHeaderStyle(newHeaders), getCustomCellStyleArray(rows.slice(1)), "TEST", "testFile.xlsx",columnWidthList  )
 
     }
 
