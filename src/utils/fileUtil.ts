@@ -224,7 +224,6 @@ export const exportExcelFile = (header:any,data:any[], sheetName:string, fileNam
     // 워크시트 추가
     XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
 
-    console.log(columWidthList)
     if(columWidthList){
         worksheet["!cols"] = columWidthList;
     }

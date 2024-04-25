@@ -53,8 +53,9 @@ export const isValidFileContent = (originalData:any[][]):boolean => {
 
 export const isValidFileContentJson = (originalData:any[]):[boolean, any[]] => {
     let result = true;
+    const data = originalData.slice(0);
 
-    const data = originalData.slice(0).reduce((_:any, cur:any, curIndex:number) => {
+    data.reduce((_:any, cur:any, curIndex:number) => {
         const errorList:string[] = [];
 
         if(typeof cur["회사코드"] !== "number"){
@@ -88,7 +89,7 @@ export const isValidFileContentJson = (originalData:any[]):[boolean, any[]] => {
             data.splice(1)
         }
 
-        originalData[curIndex] = {
+        data[curIndex] = {
             NO:cur["NO"],
             companyCode: cur['회사코드'],
             name: cur["이름"].trim(),
