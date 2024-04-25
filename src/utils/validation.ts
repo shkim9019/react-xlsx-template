@@ -51,11 +51,10 @@ export const isValidFileContent = (originalData:any[][]):boolean => {
     return result;
 }
 
-export const isValidFileContentJson = (originalData:any[]):boolean => {
+export const isValidFileContentJson = (originalData:any[]):[boolean, any[]] => {
     let result = true;
-    const data:any[][] = originalData.slice(0);
 
-    data.reduce((_:any, cur:any) => {
+    const data = originalData.slice(0).reduce((_:any, cur:any, curIndex:number) => {
         const errorList:string[] = [];
 
         if(typeof cur["회사코드"] !== "number"){
@@ -89,9 +88,17 @@ export const isValidFileContentJson = (originalData:any[]):boolean => {
             data.splice(1)
         }
 
+        originalData[curIndex] = {
+            NO:cur["NO"],
+            companyCode: cur['회사코드'],
+            name: cur["이름"].trim(),
+            email:cur["이메일"].trim(),
+            nationality:cur["국적"].trim(),
+            contact:cur["연락처"].trim(),
+            birthDate:cur["생년월일"]
+        }
         return cur;
     },[])
 
-
-    return result;
+    return [result, data];
 }

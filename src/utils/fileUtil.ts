@@ -14,11 +14,12 @@ export const onChangeFileByArray = (file:File,isValidFileContent:(data:any[][])=
     reader.readAsArrayBuffer(file)
 }
 
-export const onChangeFileByJSON = (file:File,isValidFileContent:(data:any[][])=>boolean, setState:any) => {
+export const onChangeFileByJSON = (file:File,isValidFileContent:(data:any[][])=>[boolean, any[]], setState:any) => {
     const reader = new FileReader();
     reader.onload = function(e:any):void{
         const changedData = xlsxToJsonData(e.target.result);
-        isValidFileContent(changedData) && setState(changedData);
+        const [isValid, result] = isValidFileContent(changedData);
+        isValid && setState(result);
     }
     reader.readAsArrayBuffer(file)
 }
