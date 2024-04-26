@@ -32,8 +32,7 @@ const TableCell = ({getValue, row, column, table}:any) => {
     }
 
     const onClick = (e:any) =>{
-        // console.log(e.target.value, row);
-        console.log(row.getIsSelected(), table.getState().rowSelection)
+        console.log(row)
         // console.log(table.getState().rowSelection, table.getSelectedRowModel().flatRows)
     }
 
@@ -50,6 +49,10 @@ const TableCell = ({getValue, row, column, table}:any) => {
 }
 
 const columns = [
+    columnHelper.display({
+       id:"editButton",
+       cell: props => <button className={`${props.row.id} w-full border border-amber-500` }>수정</button>
+    }),
     columnHelper.accessor("NO", {
         header: "NO",
     }),
